@@ -1,0 +1,49 @@
+name: "Build a version of the engine from the latest sources monthly"
+on:
+  schedule:
+    - cron: "0 0 1 * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "Download Just"
+        run: |
+          DIR=$(pwd)
+          mkdir -p /just
+          cd /just
+          wget https://github.com/casey/just/releases/download/0.9.8/just-0.9.8-x86_64-unknown-linux-musl.tar.gz
+          tar xzvf *.tar.gz
+          mv just /bin/just
+          cd $DIR
+      - name: "Check out"
+        uses: actions/checkout
+      - name: "Load cache"
+        uses: actions/download-artifact@v2
+        with:
+          name: build-cache
+          path: |
+            ./build
+            ./o3de
+            ./third-party
+      - name: Build
+        run: just
+      - name: Create tarball
+        run: just tar
+      - name: Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Automated Monthly Build"
+          files: |
+            pkg.tar.gz
+      - name: "Write cache"
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-cache
+          path: |
+            ./build
+            ./o3de
+            ./third-party
