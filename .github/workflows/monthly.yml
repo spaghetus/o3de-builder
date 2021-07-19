@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: "0 0 1 * *"
   workflow_dispatch:
+  push:
+    branches:
+      - "main"
 
 jobs:
   build:
@@ -11,11 +14,11 @@ jobs:
       - name: "Download Just"
         run: |
           DIR=$(pwd)
-          mkdir -p /just
+          sudo mkdir -p /just
           cd /just
-          wget https://github.com/casey/just/releases/download/0.9.8/just-0.9.8-x86_64-unknown-linux-musl.tar.gz
-          tar xzvf *.tar.gz
-          mv just /bin/just
+          sudo wget https://github.com/casey/just/releases/download/0.9.8/just-0.9.8-x86_64-unknown-linux-musl.tar.gz
+          sudo tar xzvf *.tar.gz
+          sudo mv just /bin/just
           cd $DIR
       - name: "Check out"
         uses: actions/checkout@v2
