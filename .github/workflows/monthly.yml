@@ -2,6 +2,7 @@ name: "Build a version of the engine from the latest sources monthly"
 on:
   schedule:
     - cron: "0 0 1 * *"
+  workflow_dispatch:
 
 jobs:
   build:
