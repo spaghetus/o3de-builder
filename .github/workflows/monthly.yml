@@ -18,9 +18,7 @@ jobs:
           mv just /bin/just
           cd $DIR
       - name: "Check out"
-        uses: actions/checkout
-        with:
-          lfs: true
+        uses: actions/checkout@v2
       - name: "Load cache"
         uses: actions/download-artifact@v2
         with:
