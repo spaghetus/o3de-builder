@@ -31,6 +31,7 @@ jobs:
             ./o3de
             ./third-party
       - name: Build
+        if: always()
         run: just
       - name: Create tarball
         run: just tar
